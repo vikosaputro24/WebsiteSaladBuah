@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="w-full md:w-1/2 lg:w-1/3">
                 <div class="bg-white rounded-lg shadow-md animate__animated animate__fadeInDown">
                     <div class=" text-white rounded-t-lg py-4 text-center" style="background-color: #fda085;">
-                        <h3><i class="fas fa-sign-in-alt"></i> Ayo Login Sebagai Admin !</h3>
+                        <h3><i class="fas fa-sign-in-alt"></i> Ayo Masuk Sebagai Admin !</h3>
                     </div>
                     <div class="px-6 py-8">
                         <form action="" method="POST">
@@ -72,14 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="email" class="form-input rounded-md w-full custom-input" name="email" aria-describedby="emailHelp" placeholder="Masukkan Email Anda">
                             </div>
                             <div class="mb-4">
-                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Password</label>
-                                <input type="password" class="form-input rounded-md w-full custom-input" name="password" placeholder="Masukkan Password Anda">
+                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Kata Sandi</label>
+                                <input type="password" class="form-input rounded-md w-full custom-input" name="password" placeholder="Masukkan Kata Sandi Anda">
                             </div>
                             <p class="text-center mt-4 mb-4 text-sm">
-                                Belum punya akun admin? <a href="../admin/register.php" style="color: #fda085;">Register disini</a>
+                                Belum punya akun admin? <a href="../admin/register.php" style="color: #fda085;">Daftar disini</a>
                             </p>
                             <button type="submit" class="btn-primary w-full  border-0 rounded-md py-2 px-4 text-white transition duration-300 hover:bg-yellow-500 hover:border-yellow-500" style="background-color: #fda085;">
-                                <i class="fas fa-sign-in-alt text-white"></i> Login Sebagai Admin
+                                <i class="fas fa-sign-in-alt text-white"></i> Masuk Sebagai Admin
                             </button>
                         </form>
                     </div>

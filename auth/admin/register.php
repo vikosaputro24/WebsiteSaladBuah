@@ -78,14 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="email" class="form-input rounded-md w-full focus:ring-0 focus:border-yellow-500 custom-input" name="email" aria-describedby="emailHelp" placeholder="Masukkan Email Anda">
                             </div>
                             <div class="mb-4">
-                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Password</label>
-                                <input type="password" class="form-input rounded-md w-full focus:ring-0 focus:border-yellow-500 custom-input" name="password" placeholder="Buat Password Anda">
+                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Kata Sandi</label>
+                                <input type="password" class="form-input rounded-md w-full focus:ring-0 focus:border-yellow-500 custom-input" name="password" placeholder="Buat Kata Sandi Anda">
                             </div>
                             <p class="text-center mt-4 mb-4 text-sm">
-                                Sudah punya akun? <a href="../admin/login.php" style="color: #fda085;">Login disini</a>
+                                Sudah punya akun? <a href="../admin/login.php" style="color: #fda085;">Masuk disini</a>
                             </p>
                             <button type="submit" class="btn-primary w-full border-0 rounded-md py-2 px-4 text-white transition duration-300 hover:bg-yellow-500 hover:border-yellow-500" style="background-color: #fda085;">
-                                <i class="fas fa-user-check text-white"></i> Register Sebagai Admin
+                                <i class="fas fa-user-check text-white"></i> Daftar Sebagai Admin
                             </button>
                         </form>
                     </div>

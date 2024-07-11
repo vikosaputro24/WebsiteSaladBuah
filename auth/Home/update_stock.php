@@ -1,30 +1,28 @@
 <?php
-session_start();
-include '../../koneksi.php';
+include '../../koneksi.php'; // Adjust the path as per your file structure
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $saladBuahKecil = intval($_POST['saladBuah_kecil']);
-    $saladBuahSedang = intval($_POST['saladBuah_sedang']);
-    $saladBuahBesar = intval($_POST['saladBuah_besar']);
-    $saladBuahJumbo = intval($_POST['saladBuah_jumbo']);
+// Handle POST request to update stock
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $productName = htmlspecialchars($_POST['productName']);
+    $action = htmlspecialchars($_POST['action']);
 
-    // Decrease stock based on the ordered quantities
-    $updateStockQuery = "UPDATE stock SET 
-                            stock_small = stock_small - ?, 
-                            stock_medium = stock_medium - ?, 
-                            stock_large = stock_large - ?, 
-                            stock_jumbo = stock_jumbo - ?";
+    // Update stock based on action (add or remove)
+    if ($action == 'add') {
+        $sql_update = "UPDATE products SET stock = stock - 1 WHERE product_name = ?";
+    } elseif ($action == 'remove') {
+        $sql_update = "UPDATE products SET stock = stock + 1 WHERE product_name = ?";
+    }
 
-    $stmt = $conn->prepare($updateStockQuery);
-    $stmt->bind_param('iiii', $saladBuahKecil, $saladBuahSedang, $saladBuahBesar, $saladBuahJumbo);
+    $stmt_update = $conn->prepare($sql_update);
+    $stmt_update->bind_param("s", $productName);
 
-    if ($stmt->execute()) {
-        echo "Stock updated successfully.";
+    if ($stmt_update->execute()) {
+        echo "Stock updated successfully!";
     } else {
         echo "Error updating stock: " . $conn->error;
     }
 
-    $stmt->close();
+    $stmt_update->close();
     $conn->close();
 }
 ?>

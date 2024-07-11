@@ -10,15 +10,24 @@ if (!isset($_SESSION['adminname'])) {
 
 $adminname = $_SESSION['adminname'];
 
-// Tambahkan query untuk mengambil data dari tabel orders
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$query = "SELECT * FROM orders WHERE name LIKE '%$search%' OR email LIKE '%$search%' OR telepon LIKE '%$search%'";
-$result = mysqli_query($conn, $query);
+
+// Query untuk mencari data berdasarkan pencarian
+$query = "SELECT * FROM tb_orders WHERE order_id LIKE ? OR fullname LIKE ? OR telepon LIKE ? OR email LIKE ?";
+
+$stmt = mysqli_prepare($conn, $query);
+$searchParam = "%$search%";
+mysqli_stmt_bind_param($stmt, "ssss", $searchParam, $searchParam, $searchParam, $searchParam);
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     $id = $_POST['id'];
-    $deleteQuery = "DELETE FROM orders WHERE id = $id";
-    mysqli_query($conn, $deleteQuery);
+    $deleteQuery = "DELETE FROM tb_orders WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $deleteQuery);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
     header('Location: pemesananAdmin.php');
     exit();
 }
@@ -118,6 +127,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                     <i class="fas fa-circle-exclamation w-6 h-6 inline-block mr-2"></i>
                     Pengumuman
                 </a>
+                <a href="../Home/statusAdmin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-signal w-6 h-6 inline-block mr-2"></i>
+                    Status Pemesanan
+                </a>
+                <a href="../admin/manage.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-arrow-trend-up w-6 h-6 inline-block mr-2"></i>
+                    Stok Pemesanan
+                </a>
+                <a href="../admin/review_admin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-magnifying-glass-dollar w-6 h-6 inline-block mr-2"></i>
+                    Penilaian
+                </a>
             </div>
         </nav>
     </aside>
@@ -127,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <button id="hamburger" class="text-gray-500 focus:outline-none focus:text-gray-900 sm:hidden">
                 <i class="fas fa-bars w-8 h-8"></i>
             </button>
-            <h1 class="text-xl font-semibold text-gray-800">Haloo, <?php echo $adminname; ?></h1>
+            <h1 class="text-xl font-semibold text-gray-800">Haloo, <?php echo htmlspecialchars($adminname); ?></h1>
             <nav class="hidden sm:flex space-x-4">
                 <a href="./login.php" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200">
                     <i class="fas fa-sign-out-alt w-4 h-4 mr-2"></i>
@@ -154,28 +175,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <div class="carousel-container">
                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                     <div class="carousel-item bg-white p-4 mb-4 rounded shadow">
-                        <p><strong>ID:</strong> <?php echo $row['id']; ?></p>
-                        <p><strong>Nama:</strong> <?php echo $row['name']; ?></p>
-                        <p><strong>Telepon:</strong> <?php echo $row['telepon']; ?></p>
-                        <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                        <p><strong>Alamat:</strong> <?php echo $row['alamat']; ?></p>
-                        <p><strong>Kota:</strong> <?php echo $row['city']; ?></p>
-                        <p><strong>Kode Pos:</strong> <?php echo $row['kodePos']; ?></p>
-                        <p><strong>Tanggal Pesan:</strong> <?php echo $row['orderDate']; ?></p>
-                        <p><strong>Produk:</strong> <?php echo $row['products']; ?></p>
-                        <p><strong>Ukuran:</strong> <?php echo $row['ukuran']; ?></p>
-                        <p><strong>Banyak:</strong> <?php echo $row['banyak']; ?></p>
-                        <p><strong>Total Pembayaran:</strong> <?php echo $row['total_pembayaran']; ?></p>
-                        <p><strong>Metode Pembayaran:</strong> <?php echo $row['paymentMethod']; ?></p>
-                        <p><strong>Bukti Pembayaran:</strong> <?php echo $row['payment_proof']; ?></p>
+                        <p><strong>ID:</strong> <?php echo isset($row['order_id']) ? htmlspecialchars($row['order_id']) : ''; ?></p>
+                        <p><strong>Nama:</strong> <?php echo isset($row['fullname']) ? htmlspecialchars($row['fullname']) : ''; ?></p>
+                        <p><strong>Telepon:</strong> <?php echo isset($row['telepon']) ? htmlspecialchars($row['telepon']) : ''; ?></p>
+                        <p><strong>Email:</strong> <?php echo isset($row['email']) ? htmlspecialchars($row['email']) : ''; ?></p>
+                        <p><strong>Wilayah:</strong> <?php echo isset($row['wilayah']) ? htmlspecialchars($row['wilayah']) : ''; ?></p>
+                        <p><strong>Alamat:</strong> <?php echo isset($row['address']) ? htmlspecialchars($row['address']) : ''; ?></p>
+                        <p><strong>Total Pembayaran:</strong> <?php echo isset($row['total_payment']) ? htmlspecialchars($row['total_payment']) : ''; ?></p>
+                        <p><strong>Metode Pembayaran:</strong> <?php echo isset($row['payment_method']) ? htmlspecialchars($row['payment_method']) : ''; ?></p>
+                        <p><strong>Bukti Pembayaran:</strong> <?php echo isset($row['proof_of_payment']) ? htmlspecialchars($row['proof_of_payment']) : ''; ?></p>
+                        <p><strong>Detail Pemesanan:</strong> <?php echo isset($row['orderDetails']) ? htmlspecialchars($row['orderDetails']) : ''; ?></p>
+                        <p><strong>Tanggal Pemesanan:</strong> <?php echo isset($row['order_date']) ? htmlspecialchars($row['order_date']) : ''; ?></p>
                         <div class="actions mt-2">
                             <form method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                <input type="hidden" name="id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
                                 <button type="submit" name="edit" class="text-blue-500 hover:text-blue-700"><i class='fas fa-pencil-alt'></i></button>
                             </form>
                             <form method="POST" style="display:inline;" class="delete-form">
-                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                <button type="button" name="delete" class="text-red-500 hover:text-red-700 delete-button"><i class='fas fa-trash-alt'></i></button>
+                                <input type="hidden" name="id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
+                                <button type="submit" name="delete" class="text-red-500 hover:text-red-700 delete-button"><i class='fas fa-trash-alt'></i></button>
                             </form>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <?php
-session_start(); 
+session_start();
 
-$login_status = false; 
+$login_status = false;
 
 $show_popup = !isset($_SESSION['visited_before']);
 if (isset($_SESSION['username'])) {
@@ -14,7 +14,7 @@ if (isset($_GET['logout'])) {
     session_destroy();
 
     header("Location: ../home/index.php");
-    exit; 
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
@@ -288,11 +288,9 @@ $_SESSION['visited_before'] = true;
         <div class="max-w-7xl mx-auto px-1 py-1">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                    <div>
-                        <a href="#" class="flex items-center py-5 px-2 text-gray-700">
-                            <svg class="h-6 w-6 mr-1 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 3h-6a9 9 0 01-9-9V5a9 9 0 0118 0v11a9 9 0 01-9 9z" />
-                            </svg>
+                    <div class="flex items-center py-5 px-2">
+                        <a href="#" class="flex items-center">
+                            <img src="../../assets/logohome.png" alt="Logo" class="w-10 h-10 mr-2">
                             <span class="font-bold text-white text-shadow" style="font-size: 20px;">Sabu</span>
                         </a>
                     </div>
@@ -300,16 +298,12 @@ $_SESSION['visited_before'] = true;
 
                 <!-- Primary Nav -->
                 <div class="hidden md:flex items-center space-x-1 flex-grow justify-center">
-                    <a href="#" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Beranda</a>
+                    <a href="./index.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Beranda</a>
                     <a href="#pengumuman" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Pengumuman</a>
-                    <div class="dropdown">
-                        <a href="#" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Produk</a>
-                        <div class="dropdown-menu absolute bg-white py-2 mt-2 rounded-md w-48 z-10 shadow-lg">
-                            <a href="../Home/produk.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Buah Kami</a>
-                            <a href="../Home/pemesanan.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Produk Kami</a>
-                        </div>
-                    </div>
-                    <a href="../Home/pemesanan.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Pemesanan</a>
+                    <a href="./produk.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Buah Kami</a>
+                    <a href="./cart.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Pemesanan</a>
+                    <a href="./review.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Penilaian</a>
+                    <a href="./tracking.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Penilaian</a>
                 </div>
 
                 <!-- Secondary Nav (User Menu) -->
@@ -322,12 +316,12 @@ $_SESSION['visited_before'] = true;
                             <div class="dropdown-menu absolute bg-white py-2 mt-2 rounded-md w-48 z-10 shadow-lg">
                                 <a href="./profile.php" class="block px-4 py-2 ">Profile</a>
                                 <a href="./status.php" class="block px-4 py-2 ">Status Pesanan</a>
-                                <a href="?logout=true" class="block w-full text-left py-2 px-4 text-sm text-white">Logout</a>
+                                <a href="?logout=true" class="block w-full text-left py-2 px-4 text-sm text-white">Keluar</a>
                             </div>
                         </div>
                     <?php else : ?>
                         <a href="../user/login.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">
-                            <i class="fas fa-sign-in-alt mr-1"></i>Login
+                            <i class="fas fa-sign-in-alt mr-1"></i>Masuk
                         </a>
                     <?php endif; ?>
                 </div>
@@ -341,14 +335,15 @@ $_SESSION['visited_before'] = true;
                                     <i class="fas fa-user mr-1"></i><?= htmlspecialchars($username) ?>
                                 </span>
                                 <div class="dropdown-menu absolute bg-white py-2 mt-2 rounded-md w-48 z-10 shadow-lg">
-                                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                                    <a href="?logout=true" class="block w-full text-left py-2 px-4 text-sm text-white hover:bg-gray-100">Logout</a>
+                                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profil</a>
+                                    <a href="./status.php" class="block px-4 py-2 ">Status Pesanan</a>
+                                    <a href="?logout=true" class="block w-full text-left py-2 px-4 text-sm text-white">Keluar</a>
                                 </div>
                             </div>
                         </div>
                     <?php else : ?>
                         <a href="../user/login.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">
-                            <i class="fas fa-sign-in-alt mr-1"></i>Login
+                            <i class="fas fa-sign-in-alt mr-1"></i>Masuk
                         </a>
                     <?php endif; ?>
                     <button id="mobile-menu-button" class="mobile-menu-button text-black font-bold">
@@ -361,16 +356,19 @@ $_SESSION['visited_before'] = true;
         </div>
 
         <!-- Mobile Menu -->
-        <div class="mobile-menu hidden md:hidden fixed inset-0 bg-gray-800 text-white flex flex-col items-center justify-center space-y-6 z-50">
-            <a href="../Home/index.php" class="py-2 px-4 text-lg">Beranda</a>
-            <a href="#" class="py-2 px-4 text-lg">Servis Kami</a>
-            <a href="#" class="py-2 px-4 text-lg">Produk</a>
-            <?php if ($login_status) : ?>
-                <a href="?logout=true" class="py-2 px-4 text-lg">Logout</a>
-            <?php else : ?>
-                <a href="../user/login.php" class="py-2 px-4 text-lg">Login</a>
-            <?php endif; ?>
-        </div>
+        <div class="mobile-menu hidden md:hidden absolute bg-gray-800 text-white flex flex-col items-center justify-center space-y-6 z-50 w-full">
+    <a href="../Home/index.php" class="py-2 px-4 text-lg">Beranda</a>
+    <a href="#pengumuman" class="py-2 px-4 text-lg">Pengumuman</a>
+    <a href="./produk.php" class="py-2 px-4 text-lg">Buah Kami</a>
+    <a href="./cart.php" class="py-2 px-4 text-lg">Pemesanan</a>
+    <a href="./review.php" class="py-2 px-4 text-lg">Penilaian</a>
+    <?php if ($login_status) : ?>
+        <a href="?logout=true" class="py-2 px-4 text-lg">Keluar</a>
+    <?php else : ?>
+        <a href="../user/login.php" class="py-2 px-4 text-lg">Masuk</a>
+    <?php endif; ?>
+</div>
+
     </nav>
 
     <section class="bg-cover bg-center h-screen flex items-center" style="background-image: url(../../assets/coba.png);">
@@ -386,7 +384,7 @@ $_SESSION['visited_before'] = true;
         <div class="max-w-4xl mx-auto px-4 py-8 md:py-12 slide-in-bottom">
             <div class="rounded-lg shadow-lg overflow-hidden bg-white">
                 <div class="px-6 py-4" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);"">
-                <h1 class=" text-2xl font-bold text-white">About Us</h1>
+                <h1 class=" text-2xl font-bold text-white">Tentang Kami</h1>
                     <p class="text-md mt-1 text-white">Ayoo lihat semua tentang website ini.</p>
                 </div>
                 <div class="p-6 md:flex md:items-center md:justify-between">
@@ -394,13 +392,9 @@ $_SESSION['visited_before'] = true;
                         <img src="../../assets/wallpaper.png" alt="About Us" class="rounded-lg shadow-md mx-auto md:mx-0">
                     </div>
                     <div class="md:w-1/2 md:px-6 mt-6 md:mt-0">
-                        <h2 class="text-xl font-semibold mb-2">Our Mission</h2>
+                        <h2 class="text-xl font-semibold mb-2">Website Salad Buah Mas Viko</h2>
                         <p class="text-gray-700 leading-relaxed">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </p>
-                        <h2 class="text-xl font-semibold mt-4 mb-2">Our Vision</h2>
-                        <p class="text-gray-700 leading-relaxed">
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            Website ini merupakan website salad buah yang dibuat untuk mempermudah pelanggan dalam memesan dan memilih salad buah, di website ini kami memberi kemudahan untuk pelanggan dari informasi sampai pemesanan serta pembayaran yang mudah juga merupakan prioritas kami.
                         </p>
                     </div>
                 </div>
@@ -409,35 +403,39 @@ $_SESSION['visited_before'] = true;
     </section>
 
     <section class="py-12 bg-gradient-to-r from-pink-400 via-red-400 to-yellow-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-5xl text-white text-center mb-9">Servis Kami</h1>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Card 1 -->
-                <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105">
-                    <img src="https://via.placeholder.com/400x250" alt="Card image" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-xl mb-2">Card 1</h3>
-                        <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sodales magna non ligula varius, sit amet vestibulum nulla mattis.</p>
-                        <a href="#" class="mt-4 block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Lihat lebih lanjut</a>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
+                    <div class="flex justify-center items-center h-48">
+                        <img src="../../assets/s1.png" alt="Card image" class="w-36 h-36 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Aman dan Mudah</h3>
+                        <p class="text-gray-700 mb-4">Pemesanan yang dilakukan sangat mudah dan produk yang dipesan akan terjamin keamanan dan kualitasnya sampai ke pelanggan.</p>
                     </div>
                 </div>
 
                 <!-- Card 2 -->
-                <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105">
-                    <img src="https://via.placeholder.com/400x250" alt="Card image" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-xl mb-2">Card 2</h3>
-                        <p class="text-gray-700">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-                        <a href="#" class="mt-4 block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Lihat lebih lanjut</a>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
+                    <div class="flex justify-center items-center h-48">
+                        <img src="../../assets/s2.png" alt="Card image" class="w-36 h-36 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Cepat dan Terjamin</h3>
+                        <p class="text-gray-700 mb-4">Pengiriman yang kami lakukan akan secepat mungkin selambat - lambatnya 1 hari setelah pemesanan salad buah.</p>
                     </div>
                 </div>
 
                 <!-- Card 3 -->
-                <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105">
-                    <img src="https://via.placeholder.com/400x250" alt="Card image" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-xl mb-2">Card 3</h3>
-                        <p class="text-gray-700">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam hendrerit enim quis libero malesuada.</p>
-                        <a href="#" class="mt-4 block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Lihat lebih lanjut</a>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
+                    <div class="flex justify-center items-center h-48">
+                        <img src="../../assets/s3.png" alt="Card image" class="w-36 h-36 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">Sampai</h3>
+                        <p class="text-gray-700 mb-4">Ketika sampai, pelanggan dapat memberi penilaian terhadap website ini sesuai dengan apa yang dirasakan pelanggan tersebut.</p>
                     </div>
                 </div>
             </div>
@@ -456,48 +454,38 @@ $_SESSION['visited_before'] = true;
         </div>
     </div>
 
-    <footer class="bg-gray-700 text-center pt-5">
+    <footer class="text-center pt-5" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
         <div class="max-w-6xl m-auto text-gray-800 flex flex-wrap justify-center pt-5">
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
-                <div class="text-xs uppercase text-gray-400 font-medium mb-6">
-                    Product
+                <div class="text-xs uppercase text-black font-bold mb-6">
+                    Alamat
                 </div>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Features
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Clients
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Pricing
-                </a>
+                <p class="text-white font-medium">JL. Rama Raya No.2 Perumnas 2 Kota Tangerang</p>
+                <p class="text-white font-medium">Cibodas, Cibodas Baru, 15138</p>
             </div>
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
-                <div class="text-xs uppercase text-gray-400 font-medium mb-6">
-                    Company
+                <div class="text-xs uppercase text-black font-bold mb-6">
+                    Telepon
                 </div>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    About Us
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Careers
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Contact
-                </a>
+                <p class="my-3 block text-white font-medium">
+                    085710847277
+                </p>
+                <p class="my-3 block text-white font-medium">
+                    081514587316
+                </p>
             </div>
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
-                <div class="text-xs uppercase text-gray-400 font-medium mb-6">
-                    Community
+                <div class="text-xs uppercase text-black font-bold mb-6">
+                    Media Sosial
                 </div>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Blog
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Discord
-                </a>
-                <a href="#" class="my-3 block text-gray-300 hover:text-gray-100 text-sm font-medium duration-700">
-                    Help Center
+                <a href="https://www.facebook.com/profile.php?id=100084065671347&locale=id_ID" rel="noreferrer noopener nofollow" target="_blank" class="pl-4 text-white font-medium">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a> <br>
+                <a href="https://www.tiktok.com/@ordinaryyclown" rel="noreferrer noopener nofollow" target="_blank" class="pl-4 text-white font-medium">
+                    <i class="fab fa-tiktok"></i> Tiktok
+                </a> <br>
+                <a href="https://www.instagram.com/viko_saputro/" rel="noreferrer noopener nofollow" target="_blank" class="pl-4 text-white font-medium">
+                    <i class="fab fa-instagram"></i> Instagram
                 </a>
             </div>
         </div>
@@ -506,21 +494,10 @@ $_SESSION['visited_before'] = true;
         <div class="pt-5 mt-8 border-t border-gray-800 text-center">
             <div class="flex flex-col items-center">
                 <div class="sm:w-2/3 text-center py-6">
-                    <p class="text-sm text-gray-400 font-bold mb-2">
-                        © 2024 Your Company. All rights reserved.
+                    <p class="text-sm text-white font-bold mb-2">
+                        © 2024 Sabu Mas Viko.
                     </p>
                 </div>
-            </div>
-            <div class="pb-5 text-blue-300">
-                <a href="https://www.facebook.com/xyz" rel="noreferrer noopener nofollow" target="_blank" class="pl-4">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="https://twitter.com/xyz" rel="noreferrer noopener nofollow" target="_blank" class="pl-4">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="https://www.instagram.com/xyz" rel="noreferrer noopener nofollow" target="_blank" class="pl-4">
-                    <i class="fab fa-instagram"></i>
-                </a>
             </div>
         </div>
     </footer>
@@ -581,7 +558,7 @@ $_SESSION['visited_before'] = true;
                 welcomePopup.style.opacity = '0';
                 setTimeout(() => {
                     welcomePopup.style.pointerEvents = 'none';
-                }, 300); 
+                }, 300);
             });
 
             setTimeout(() => {

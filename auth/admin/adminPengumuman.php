@@ -69,6 +69,18 @@ function updateIndexPengumuman($content)
                     <i class="fas fa-circle-exclamation w-6 h-6 inline-block mr-2"></i>
                     Pengumuman
                 </a>
+                <a href="../Home/statusAdmin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-signal w-6 h-6 inline-block mr-2"></i>
+                    Status Pemesanan
+                </a>
+                <a href="../admin/manage.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-arrow-trend-up w-6 h-6 inline-block mr-2"></i>
+                    Stok Pemesanan
+                </a>
+                <a href="../admin/review_admin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-magnifying-glass-dollar w-6 h-6 inline-block mr-2"></i>
+                    Penilaian
+                </a>
             </div>
         </nav>
     </aside>

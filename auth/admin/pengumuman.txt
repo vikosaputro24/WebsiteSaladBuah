@@ -1,1 +1,7 @@
-Pembayaran di website ini hanya bisa dilakukan dengan 2 cara yaitu lewat Bank biasa (BCA, MANDIRI) dan Bank online (GOJEK, DANA, OVO, SHOPPEE PAY).zzzzzzzzzzzzzzz
+Cara Memesan di Website Salad Buah Mas Viko <br>
+1. Pelanggan bisa melihat-lihat terlebih dahulu produk yang diinginkan. <br>
+2. Lalu pelanggan bisa mengklik tombol pemesanan di produk yang diminati. <br>
+3. Setelah mengklik, pelanggan akan diarahkan ke form pemesanan. <br>
+4. Di form pemesanan, pelanggan mengisi identitas dan memilih produk yang diinginkan. <br>
+5. Lakukan pembayaran sesuai dengan instruksi yang diberikan. <br>
+6. Setelah pembayaran berhasil, pesanan Anda akan diproses dan Anda dapat melihat status pesanan Anda di halaman status pemesanan.

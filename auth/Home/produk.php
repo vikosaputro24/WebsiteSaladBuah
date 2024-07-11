@@ -125,7 +125,7 @@
             <a href="../Home/index.php" class="items-center transition duration-300 slide-in-right" style="color: #fda085;">
                 <i class="fas fa-arrow-left fixed-icons slide-in-right" style="background-color: #fff; padding: 10px; border-radius: 50%;"></i>
             </a>
-            <button onclick="window.location.href='pemesanan.php'" class="flex items-center p-3 rounded-lg bg-white transition duration-300 hover-pop slide-in-right" style="color: #fda085;">
+            <button onclick="window.location.href='cart.php'" class="flex items-center p-3 rounded-lg bg-white transition duration-300 hover-pop slide-in-right" style="color: #fda085;">
                 Lihat produk kami !
             </button>
         </div>

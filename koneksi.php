@@ -1,12 +1,18 @@
 <?php
-$servername = "localhost";
-$database = "db_sabu";
-$username = "root";
-$password = "";
 
-$conn = mysqli_connect($servername, $username, $password, $database);
+    $dbhost = "localhost";
+    $dbuser = "root";
+    $dbpass = ""; // Sesuaikan dengan password database Anda
+    $dbname = "db_sabu"; // Sesuaikan dengan nama database Anda
 
-if (!$conn) {
-    die("Koneksi Gagal : " . mysqli_connect_error());
-}
+    $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+    // Periksa koneksi
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+
+    $conn->close();
+
 ?>

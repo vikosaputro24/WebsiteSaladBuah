@@ -75,33 +75,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$query_total_pesan = "SELECT COUNT(*) as total_pesan FROM orders";
+$query_total_pesan = "SELECT COUNT(*) as total_pesan FROM tb_orders";
 $result_total_pesan = $conn->query($query_total_pesan);
 $row_total_pesan = $result_total_pesan->fetch_assoc();
 $total_pesan = $row_total_pesan['total_pesan'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
+    $fullname = $_POST['fullname'];
     $telepon = $_POST['telepon'];
     $email = $_POST['email'];
-    $alamat = $_POST['alamat'];
-    $city = $_POST['city'];
-    $kodePos = $_POST['kodePos'];
-    $orderDate = $_POST['orderDate'];
-    $ukuran = $_POST['ukuran'];
-    $banyak = $_POST['banyak'];
-    $total_pembayaran = $_POST['total_pembayaran'];
-    $paymentMethod = $_POST['paymentMethod'];
+    $wilayah = $_POST['wilayah'];
+    $address = $_POST['address'];
+    $total_payment = $_POST['total_payment'];
+    $payment_method = $_POST['payment_method'];
+    $proof_of_payment = $_POST['proof_of_payment'];
+    $orderDetails = $_POST['orderDetails'];
+    $order_date = $_POST['order_date'];
+    $status = $_POST['status'];
 
     // Validate input
-    if (empty($name) || empty($telepon) || empty($email) || empty($alamat) || empty($city) || empty($kodePos) || empty($orderDate) || empty($ukuran) || empty($banyak) || empty($total_pembayaran) || empty($paymentMethod)) {
+    if (empty($fullname) || empty($telepon) || empty($email) || empty($wilayah) || empty($address) || empty($total_payment) || empty($payment_method) || empty($proof_of_payment) || empty($orderDetails) || empty($order_date) || empty($status)) {
         echo "Semua field harus diisi!";
         exit;
     }
 
     // Prepare SQL statement to prevent SQL injection
-    $query_sql = $conn->prepare("INSERT INTO orders (name, telepon, email, alamat, city, kodePos, orderDate, ukuran, banyak, total_pembayaran, paymentMethod) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $query_sql->bind_param("sssssssssss", $name, $telepon, $email, $alamat, $city, $kodePos, $orderDate, $ukuran, $banyak, $total_pembayaran, $paymentMethod);
+    $query_sql = $conn->prepare("INSERT INTO tb_orders (fullname, telepon, email, wilayah, address, total_payment, payment_method, proof_of_payment, orderDetails, order_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query_sql->bind_param("sssssssssss", $fullname, $telepon, $email, $wilayah, $address, $total_payment, $payment_method, $proof_of_payment, $orderDetails, $order_date, $status);
 
     if ($query_sql->execute()) {
         $query_sql->close();
@@ -111,6 +111,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Pemesanan Gagal: " . $query_sql->error;
     }
+}
+
+$query_total_reviews = "SELECT COUNT(*) as total_reviews FROM reviews";
+$result_total_reviews = $conn->query($query_total_reviews);
+$row_total_reviews = $result_total_reviews->fetch_assoc();
+$total_reviews = $row_total_reviews['total_reviews'];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $rating = $_POST['rating'];
+    $comment = $_POST['comment'];
+    // Validate input
+    if (empty($rating) || empty($comment)) {
+        echo "Semua field harus diisi!";
+        exit;
+    }
+
+    // Prepare SQL statement to prevent SQL injection
+    $query_sql = $conn->prepare("INSERT INTO reviews (rating, comment) VALUES (?, ?)");
+    $query_sql->bind_param("ss", $rating, $comment);
+
+    if ($query_sql->execute()) {
+        $query_sql->close();
+        $conn->close();
+        header("Location: index.php");
+        exit;
+    } 
+}
+
+$query_total_produk = "SELECT COUNT(*) as total_produk FROM products";
+$result_total_produk = $conn->query($query_total_produk);
+$row_total_produk = $result_total_produk->fetch_assoc();
+$total_produk = $row_total_produk['total_produk'];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $product_name = $_POST['product_name'];
+    $stock = $_POST['stock'];
+    $price = $_POST['price'];
+    // Validate input
+    if (empty($product_name) || empty($stock)) {
+        echo "Semua field harus diisi!";
+        exit;
+    }
+
+    // Prepare SQL statement to prevent SQL injection
+    $query_sql = $conn->prepare("INSERT INTO reviews (product_name, stock, price) VALUES (?, ?, ?)");
+    $query_sql->bind_param("sss", $product_name, $stock, $price);
+
+    if ($query_sql->execute()) {
+        $query_sql->close();
+        $conn->close();
+        header("Location: index.php");
+        exit;
+    } 
 }
 ?>
 
@@ -183,12 +236,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Pengumuman
                 </a>
                 <a href="../Home/statusAdmin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
-                    <i class="fas fa-circle-exclamation w-6 h-6 inline-block mr-2"></i>
+                    <i class="fa-solid fa-signal w-6 h-6 inline-block mr-2"></i>
                     Status Pemesanan
                 </a>
-                <a href="../admin/product_admin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
-                    <i class="fas fa-circle-exclamation w-6 h-6 inline-block mr-2"></i>
+                <a href="../admin/manage.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-arrow-trend-up w-6 h-6 inline-block mr-2"></i>
                     Stok Pemesanan
+                </a>
+                <a href="../admin/review_admin.php" class="block py-3 px-6 text-sm font-medium text-gray-200 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
+                    <i class="fa-solid fa-magnifying-glass-dollar w-6 h-6 inline-block mr-2"></i>
+                    Penilaian
                 </a>
             </div>
         </nav>
@@ -263,6 +320,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h2 class="text-xl font-semibold text-white">Daftar Pesan</h2>
                             <p class="text-white mb-2">Total pesanan: <?php echo $total_pesan; ?></p>
                             <a href="./pemesananAdmin.php" class="inline-block bg-gray-600 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50 transition-colors duration-300">
+                                <span class="flex items-center">
+                                    Lihat Detail
+                                    <i class="fas fa-chevron-right ml-2"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-100 p-6 rounded-lg shadow-md flex items-center justify-center" style="background-color: #fda085;">
+                        <div class="mr-10">
+                            <i class="fas fa-cart-arrow-down text-5xl text-black"></i>
+                        </div>
+                        <div class="text-center">
+                            <h2 class="text-xl font-semibold text-white">Daftar Produk</h2>
+                            <p class="text-white mb-2">Total produk: <?php echo $total_produk; ?></p>
+                            <a href="./review_admin.php" class="inline-block bg-gray-600 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50 transition-colors duration-300">
+                                <span class="flex items-center">
+                                    Lihat Detail
+                                    <i class="fas fa-chevron-right ml-2"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-100 p-6 rounded-lg shadow-md flex items-center justify-center" style="background-color: #fda085;">
+                        <div class="mr-10">
+                            <i class="fas fa-star text-5xl text-black"></i>
+                        </div>
+                        <div class="text-center">
+                            <h2 class="text-xl font-semibold text-white">Daftar Reviews</h2>
+                            <p class="text-white mb-2">Total pesanan: <?php echo $total_reviews; ?></p>
+                            <a href="./review_admin.php" class="inline-block bg-gray-600 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50 transition-colors duration-300">
                                 <span class="flex items-center">
                                     Lihat Detail
                                     <i class="fas fa-chevron-right ml-2"></i>

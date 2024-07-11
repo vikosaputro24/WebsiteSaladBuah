@@ -1,23 +1,18 @@
 <?php
 require '../../koneksi.php';
 session_start();
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    // Prepare SQL statement to prevent SQL injection
     $stmt = $conn->prepare("SELECT user_id, username, email, password FROM tb_loginuser WHERE email = ?");
     $stmt->bind_param("s", $email);
-
     $stmt->execute();
     $stmt->store_result();
     
     if ($stmt->num_rows > 0) {
         $stmt->bind_result($user_id, $username, $email_db, $password_db);
         $stmt->fetch();
-
-        // Verifikasi password (gunakan fungsi password_verify untuk hashing yang aman)
         if (password_verify($password, $password_db)) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
@@ -38,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </script>";
         exit;
     }
-
     $stmt->close();
     $conn->close();
 }
@@ -46,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,14 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-
 <body class="min-h-screen flex justify-center items-center" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
     <div class="container mx-auto">
         <div class="flex justify-center">
             <div class="w-full md:w-1/2 lg:w-1/3">
                 <div class="bg-white rounded-lg shadow-md animate__animated animate__fadeInDown">
                     <div class="text-white rounded-t-lg py-4 text-center" style="background-color: #fda085;">
-                        <h3><i class="fas fa-sign-in-alt"></i> Ayo Login !</h3>
+                        <h3><i class="fas fa-sign-in-alt"></i> Ayo Masuk !</h3>
                     </div>
                     <div class="px-6 py-8">
                         <form action="" method="POST">
@@ -83,15 +75,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="email" class="form-input rounded-md w-full custom-input" name="email" aria-describedby="emailHelp" placeholder="Masukkan Email Anda" required>
                             </div>
                             <div class="mb-4 flex justify-between items-center">
-                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Password</label>
-                                <a href="../user/forgot_password.php" class="text-sm" style="color: #fda085;">Forgot Password?</a>
+                                <label for="password" class="block mb-1" style="color: #fda085;"><i class="fas fa-lock"></i> Kata Sandi</label>
+                                <a href="../user/forgot_password.php" class="text-sm" style="color: #fda085;">Lupa Kata Sandi ?</a>
                             </div>
-                            <input type="password" class="form-input rounded-md w-full custom-input" name="password" placeholder="Masukkan Password Anda" required>
+                            <div class="relative mb-4">
+                                <input type="password" class="form-input rounded-md w-full custom-input" name="password" placeholder="Masukkan Kata Sandi Anda" required>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                    <i id="togglePassword" class="fas fa-eye cursor-pointer text-gray-400 hover:text-gray-600"></i>
+                                </span>
+                            </div>
                             <p class="text-center mt-4 mb-4 text-sm">
-                                Belum punya akun? <a href="../user/register.php" style="color: #fda085;">Register disini</a>
+                                Belum punya akun? <a href="../user/register.php" style="color: #fda085;">Daftar disini</a>
                             </p>
                             <button type="submit" class="btn-primary w-full border-0 rounded-md py-2 px-4 text-white transition duration-300 hover:bg-yellow-500 hover:border-yellow-500 bg-orange-400" style="background-color: #fda085;">
-                                <i class="fas fa-sign-in-alt text-white"></i> Login
+                                <i class="fas fa-sign-in-alt text-white"></i> Masuk
                             </button>
                         </form>
                     </div>
@@ -99,6 +96,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+    <script>
+const togglePassword = document.querySelector('#togglePassword');
+const password = document.querySelector('input[name="password"]');
+
+togglePassword.addEventListener('click', function () {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.classList.toggle('fa-eye-slash');
+});
+
+    </script>
 </body>
 
 </html>
