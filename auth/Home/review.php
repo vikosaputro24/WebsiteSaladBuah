@@ -1,21 +1,14 @@
 <?php
 session_start();
 
-// Check if user_id is set in session
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../user/login.php');
     exit();
 }
-
-// Include database connection file
 include '../../koneksi.php';
-
-// Assuming $user_id contains the logged-in user's user_id
 $user_id = $_SESSION['user_id'];
-
 $message = "";
-$latest_reviews = []; // Initialize the variable
-
+$latest_reviews = []; 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rating = $_POST['rating'];
     $comment = $_POST['comment'];
@@ -23,11 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query = "INSERT INTO reviews (user_id, rating, comment) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iis", $user_id, $rating, $comment);
-
     if ($stmt->execute()) {
         $message = "Review Anda berhasil disimpan!";
-
-        // Fetch the latest reviews by the user
         $review_query = "SELECT rating, comment, created_at FROM reviews WHERE user_id = ? ORDER BY created_at DESC LIMIT 5";
         $review_stmt = $conn->prepare($review_query);
         $review_stmt->bind_param("i", $user_id);
@@ -37,27 +27,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $latest_reviews[] = $row;
         }
         $review_stmt->close();
-
-        // Store latest reviews in session for persistence
         $_SESSION['latest_reviews'] = $latest_reviews;
     } else {
         $message = "Error: " . $stmt->error;
     }
-
     $stmt->close();
 }
 
-// Check if there are reviews in session to display
 if (isset($_SESSION['latest_reviews'])) {
     $latest_reviews = $_SESSION['latest_reviews'];
 }
-
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,7 +82,6 @@ $conn->close();
         }
     </style>
 </head>
-
 <body class="min-h-screen bg-gray-100 py-12" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
     <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold mb-4">Berikan Penilaian Anda</h2>
@@ -125,15 +107,12 @@ $conn->close();
             <a href="./index.php" class="inline-block bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md mt-4">
                 Kembali
             </a>
-
         </form>
-        <!-- Toast notification -->
         <?php if ($message) { ?>
             <div id="toast" class="bg-green-500 text-white py-2 px-4 rounded-md shadow-md">
                 <?php echo $message; ?>
             </div>
         <?php } ?>
-        <!-- Display latest reviews -->
         <?php if (!empty($latest_reviews)) { ?>
             <div class="reviews-carousel mt-8 p-6 bg-gray-100 rounded-lg shadow-md">
                 <?php foreach ($latest_reviews as $review) { ?>
@@ -151,8 +130,6 @@ $conn->close();
             </div>
         <?php } ?>
     </div>
-
-    <!-- JavaScript libraries -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
 

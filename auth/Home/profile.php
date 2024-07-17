@@ -11,7 +11,6 @@ $email = $_SESSION['email'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,7 +102,6 @@ $email = $_SESSION['email'];
         }
     </style>
 </head>
-
 <body class="min-h-screen" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
     <!-- Profile Content -->
     <div class="container profile-content">

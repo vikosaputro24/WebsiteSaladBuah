@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="mb-4">
                                 <label for="adminname" class="block mb-1" style="color: #fda085;"><i class="fas fa-user"></i> Nama Admin</label>
-                                <input type="text" class="form-input rounded-md w-full focus:ring-0 focus:border-yellow-500 custom-input" name="adminname" aria-describedby="adminnameHelp" placeholder="Masukkan Username Anda">
+                                <input type="text" class="form-input rounded-md w-full focus:ring-0 focus:border-yellow-500 custom-input" name="adminname" aria-describedby="adminnameHelp" placeholder="Masukkan Nama Admin Anda">
                             </div>
                             <div class="mb-4">
                                 <label for="telepon" class="block mb-1" style="color: #fda085;"><i class="fas fa-phone"></i> Telepon</label>

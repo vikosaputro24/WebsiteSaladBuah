@@ -36,7 +36,6 @@ $_SESSION['visited_before'] = true;
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -282,7 +281,6 @@ $_SESSION['visited_before'] = true;
         }
     </style>
 </head>
-
 <body>
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out navbar-bg" style="background-color: transparent;">
         <div class="max-w-7xl mx-auto px-1 py-1">
@@ -295,7 +293,6 @@ $_SESSION['visited_before'] = true;
                         </a>
                     </div>
                 </div>
-
                 <!-- Primary Nav -->
                 <div class="hidden md:flex items-center space-x-1 flex-grow justify-center">
                     <a href="./index.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Beranda</a>
@@ -303,9 +300,7 @@ $_SESSION['visited_before'] = true;
                     <a href="./produk.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Buah Kami</a>
                     <a href="./cart.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Pemesanan</a>
                     <a href="./review.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Penilaian</a>
-                    <a href="./tracking.php" class="py-5 px-3 text-white font-bold text-shadow nav-item" style="font-size: 20px;">Penilaian</a>
                 </div>
-
                 <!-- Secondary Nav (User Menu) -->
                 <div class="hidden md:flex items-center space-x-1 relative">
                     <?php if ($login_status) : ?>
@@ -325,7 +320,6 @@ $_SESSION['visited_before'] = true;
                         </a>
                     <?php endif; ?>
                 </div>
-
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
                     <?php if ($login_status) : ?>
@@ -354,9 +348,8 @@ $_SESSION['visited_before'] = true;
                 </div>
             </div>
         </div>
-
         <!-- Mobile Menu -->
-        <div class="mobile-menu hidden md:hidden absolute bg-gray-800 text-white flex flex-col items-center justify-center space-y-6 z-50 w-full">
+<div class="mobile-menu hidden md:hidden absolute bg-gray-800 text-white flex flex-col items-center justify-center space-y-6 z-50 w-full">
     <a href="../Home/index.php" class="py-2 px-4 text-lg">Beranda</a>
     <a href="#pengumuman" class="py-2 px-4 text-lg">Pengumuman</a>
     <a href="./produk.php" class="py-2 px-4 text-lg">Buah Kami</a>
@@ -368,18 +361,14 @@ $_SESSION['visited_before'] = true;
         <a href="../user/login.php" class="py-2 px-4 text-lg">Masuk</a>
     <?php endif; ?>
 </div>
-
     </nav>
-
     <section class="bg-cover bg-center h-screen flex items-center" style="background-image: url(../../assets/coba.png);">
         <div class="container mx-auto text-center">
             <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight fall-in" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Selamat Datang di Website</h1>
             <h3 class="text-4xl text-white font-bold mt-4 fall-in" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Salad Buah Mas Viko.</h3>
-            <a href="#" class="bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg mt-4 inline-block shadow-md slide-in-bottom zoom-button">Produk Kami</a>
+            <a href="./cart.php" class="bg-yellow-400 text-white font-bold py-2 px-4 rounded-lg mt-4 inline-block shadow-md slide-in-bottom zoom-button">Produk Kami</a>
         </div>
     </section>
-
-
     <section id="about" class="about bg-gradient-to-r from-pink-400 via-red-400 to-yellow-300">
         <div class="max-w-4xl mx-auto px-4 py-8 md:py-12 slide-in-bottom">
             <div class="rounded-lg shadow-lg overflow-hidden bg-white">
@@ -401,7 +390,6 @@ $_SESSION['visited_before'] = true;
             </div>
         </div>
     </section>
-
     <section class="py-12 bg-gradient-to-r from-pink-400 via-red-400 to-yellow-300">
         <h1 class="text-5xl text-white text-center mb-9">Servis Kami</h1>
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -416,7 +404,6 @@ $_SESSION['visited_before'] = true;
                         <p class="text-gray-700 mb-4">Pemesanan yang dilakukan sangat mudah dan produk yang dipesan akan terjamin keamanan dan kualitasnya sampai ke pelanggan.</p>
                     </div>
                 </div>
-
                 <!-- Card 2 -->
                 <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
                     <div class="flex justify-center items-center h-48">
@@ -427,7 +414,6 @@ $_SESSION['visited_before'] = true;
                         <p class="text-gray-700 mb-4">Pengiriman yang kami lakukan akan secepat mungkin selambat - lambatnya 1 hari setelah pemesanan salad buah.</p>
                     </div>
                 </div>
-
                 <!-- Card 3 -->
                 <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
                     <div class="flex justify-center items-center h-48">
@@ -441,7 +427,6 @@ $_SESSION['visited_before'] = true;
             </div>
         </div>
     </section>
-
     <div id="pengumumanModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
         <div class="bg-white rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3 transform transition-transform duration-300 ease-in-out scale-95">
             <div class="border-b px-4 py-2 flex justify-between items-center bg-gradient-to-r from-pink-400 via-red-400 to-yellow-300">
@@ -453,7 +438,6 @@ $_SESSION['visited_before'] = true;
             </div>
         </div>
     </div>
-
     <footer class="text-center pt-5" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
         <div class="max-w-6xl m-auto text-gray-800 flex flex-wrap justify-center pt-5">
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
@@ -465,14 +449,10 @@ $_SESSION['visited_before'] = true;
             </div>
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
                 <div class="text-xs uppercase text-black font-bold mb-6">
-                    Telepon
+                    Kontak
                 </div>
-                <p class="my-3 block text-white font-medium">
-                    085710847277
-                </p>
-                <p class="my-3 block text-white font-medium">
-                    081514587316
-                </p>
+                <a href="https://api.whatsapp.com/send/?phone=085710847277&text&type=phone_number&app_absent=0" class="my-3 block text-white font-medium">Whatsapp</a>
+                <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" class="my-3 block text-white font-medium">Email</a>
             </div>
             <div class="p-5 w-1/2 sm:w-4/12 md:w-4/12">
                 <div class="text-xs uppercase text-black font-bold mb-6">
@@ -489,7 +469,6 @@ $_SESSION['visited_before'] = true;
                 </a>
             </div>
         </div>
-
         </div>
         <div class="pt-5 mt-8 border-t border-gray-800 text-center">
             <div class="flex flex-col items-center">
@@ -501,7 +480,6 @@ $_SESSION['visited_before'] = true;
             </div>
         </div>
     </footer>
-
     <?php if ($show_popup) : ?>
         <div class="welcome-popup" id="welcome-popup">
             <div class="popup-content">
@@ -511,7 +489,6 @@ $_SESSION['visited_before'] = true;
             </div>
         </div>
     <?php endif; ?>
-
     <script>
         const navbar = document.getElementById('navbar');
         const mobileMenuButton = document.getElementById('mobile-menu-button');

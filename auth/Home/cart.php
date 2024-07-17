@@ -1,81 +1,40 @@
 <?php
-session_start(); // Start the session
+session_start(); 
 
-// Check if user_id is set in session
 if (!isset($_SESSION['user_id'])) {
-    // Handle the case when user_id is not set, for example, redirect to login page
     header('Location: ../user/login.php');
     exit();
 }
+include '../../koneksi.php'; 
 
-// Include your database connection file if not included already
-include '../../koneksi.php'; // Adjust the path as per your file structure
+$user_id = $_SESSION['user_id']; 
 
-// Assuming $user_id contains the logged-in user's user_id (UUID)
-$user_id = $_SESSION['user_id']; // Replace with your session variable name
-
-// Prepare and execute a SELECT query to fetch user details
 $sql_user = "SELECT fullname, telepon, email FROM tb_loginuser WHERE user_id = ?";
 $stmt_user = $conn->prepare($sql_user);
-$stmt_user->bind_param("s", $user_id); // Assuming user_id is stored as CHAR/VARCHAR in database
+$stmt_user->bind_param("s", $user_id); 
 $stmt_user->execute();
 $stmt_user->bind_result($fullname, $telepon, $email);
 $stmt_user->fetch();
 $stmt_user->close();
-
-// Handle form submission
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize input data
     $fullname = htmlspecialchars($_POST['fullname']);
     $telepon = htmlspecialchars($_POST['telepon']);
     $email = htmlspecialchars($_POST['email']);
     $wilayah = htmlspecialchars($_POST['wilayah']);
     $address = htmlspecialchars($_POST['address']);
     $totalPayment = floatval($_POST['totalPayment']);
-    $paymentMethod = htmlspecialchars($_POST['paymentMethod']);
     $orderDetails = isset($_POST['orderDetails']) ? htmlspecialchars_decode($_POST['orderDetails']) : '';
-    // Ensure order_details is properly retrieved
-
-    // Handling file upload for proof of payment
-    $proofOfPayment = ''; // Placeholder for handling file upload
-
-    // Check if address is not empty
+    $proofOfPayment = ''; 
     if (empty($address)) {
         echo "Address field cannot be empty.";
         exit();
     }
-
-    // Check if proof of payment file is uploaded
-    if (isset($_FILES['proofOfPayment']) && $_FILES['proofOfPayment']['error'] === UPLOAD_ERR_OK) {
-        $tempFile = $_FILES['proofOfPayment']['tmp_name'];
-        $targetFile = 'uploads/' . basename($_FILES['proofOfPayment']['name']);
-
-        if (move_uploaded_file($tempFile, $targetFile)) {
-            $proofOfPayment = $targetFile; // Set $proofOfPayment to the file path
-        } else {
-            echo "Failed to move uploaded file.";
-            exit();
-        }
-    } else {
-        echo "Proof of payment file is required.";
-        exit();
-    }
-
-    // Generate UUID for order_id
     $order_id = uniqid();
-
-    // Prepare INSERT statement
-    $sql_insert = "INSERT INTO tb_orders (order_id, user_id, fullname, telepon, email, wilayah, address, total_payment, payment_method, proof_of_payment, orderDetails)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO tb_orders (order_id, user_id, fullname, telepon, email, wilayah, address, total_payment, orderDetails)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("sssssssssss", $order_id, $user_id, $fullname, $telepon, $email, $wilayah, $address, $totalPayment, $paymentMethod, $proofOfPayment, $orderDetails);
-
-    // Execute the INSERT statement
+    $stmt_insert->bind_param("sssssssss", $order_id, $user_id, $fullname, $telepon, $email, $wilayah, $address, $totalPayment, $orderDetails);
     if ($stmt_insert->execute()) {
-        // Order successfully inserted
-
-        // Update stock for each product in the order
         $orderItems = json_decode($_POST['cartItems'], true);
         foreach ($orderItems as $productName => $item) {
             $quantity = $item['quantity'];
@@ -85,41 +44,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_update_stock->execute();
             $stmt_update_stock->close();
         }
+        require_once '../../midtrans-php-master/Midtrans.php';
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-Xeek4LO4Oh6YpdT36Tyf6Dmr';
+        \Midtrans\Config::$isProduction = false; 
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+        $transaction_details = array(
+            'order_id' => $order_id,
+            'gross_amount' => $totalPayment,
+        );
+        $item_details = array();
+        foreach ($orderItems as $productName => $item) {
+            $item_details[] = array(
+                'id' => $productName,
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'name' => $productName,
+            );
+        }
+        $customer_details = array(
+            'first_name' => $fullname,
+            'last_name' => '',
+            'email' => $email,
+            'phone' => $telepon,
+            'shipping_address' => $address,
+        );
+        $transaction = array(
+            'transaction_details' => $transaction_details,
+            'customer_details' => $customer_details,
+            'item_details' => $item_details,
+        );
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($transaction);
+            echo "<script>window.location.href = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken';</script>";
+            echo "<noscript><meta http-equiv='refresh' content='0;url=https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken'></noscript>";
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        $stmt_insert->close();
+        $conn->close();
 
-        echo "<script>
-        alert('Pemesanan Berhasil !');
-        window.location.href = 'cart.php'; // Ganti dengan halaman tujuan Anda
-      </script>";
-        // You can redirect or perform further actions here
+        exit();
     } else {
-        // Error in executing SQL statement
         echo "Error: " . $stmt_insert->error;
     }
-
-    // Close statement and connection
     $stmt_insert->close();
     $conn->close();
-
-    // Redirect or show success message as needed
     exit();
 }
-
-// Close database connection
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <style>
-        /* Gaya kustom tambahan */
         .toast {
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
@@ -128,8 +111,6 @@ $conn->close();
         .show-toast {
             opacity: 1;
         }
-
-        /* Gaya khusus untuk modal */
         .modal {
             display: none;
             position: fixed;
@@ -141,7 +122,6 @@ $conn->close();
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .modal-content {
             background-color: #fefefe;
             margin: 10% auto;
@@ -150,7 +130,6 @@ $conn->close();
             width: 80%;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         }
-
         .modal-header {
             padding: 10px 16px;
             background-color: #5DADE2;
@@ -159,11 +138,9 @@ $conn->close();
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
         }
-
         .modal-body {
             padding: 16px;
         }
-
         .modal-footer {
             padding: 10px 16px;
             background-color: #fff;
@@ -172,8 +149,6 @@ $conn->close();
             border-bottom-right-radius: 5px;
             text-align: right;
         }
-
-        /* Gaya khusus untuk tombol-tombol */
         .btn-primary {
             background-color: #4CAF50;
             color: white;
@@ -187,11 +162,9 @@ $conn->close();
             cursor: pointer;
             border-radius: 5px;
         }
-
         .btn-primary:hover {
             background-color: #45a049;
         }
-
         .btn-secondary {
             background-color: #f44336;
             color: white;
@@ -205,13 +178,11 @@ $conn->close();
             cursor: pointer;
             border-radius: 5px;
         }
-
         .btn-secondary:hover {
             background-color: #da190b;
         }
     </style>
 </head>
-
 <body class="min-h-screen" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
     <div class="container mx-auto p-4">
     <div class="flex items-center mb-4">
@@ -220,29 +191,19 @@ $conn->close();
         <h1 class="text-3xl font-bold">Produk Kami</h1>
     </a>
 </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <?php
-            // Konfigurasi koneksi ke database
             $servername = "localhost";
-            $username = "root"; // Ganti dengan username MySQL Anda
-            $password = ""; // Ganti dengan password MySQL Anda
-            $dbname = "db_sabu"; // Ganti dengan nama database Anda
-
-            // Buat koneksi ke database
+            $username = "root";
+            $password = "";
+            $dbname = "db_sabu"; 
             $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Periksa koneksi
             if ($conn->connect_error) {
                 die("Koneksi gagal: " . $conn->connect_error);
             }
-
-            // Query untuk mengambil data produk
             $sql = "SELECT * FROM products";
             $result = $conn->query($sql);
-
             if ($result->num_rows > 0) {
-                // Tampilkan data produk
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="bg-white p-4 rounded-lg shadow-md">';
                     echo '<h3 class="text-lg text-center font-bold mb-2" style="font-size: 24px;">' . $row['product_name'] . '</h3>';
@@ -256,13 +217,9 @@ $conn->close();
             } else {
                 echo "Tidak ada produk yang tersedia.";
             }
-
-            // Tutup koneksi database
             $conn->close();
             ?>
         </div>
-
-        <!-- Shopping Cart -->
         <div class="p-4 bg-white rounded-lg shadow-md mt-4">
             <h2 class="text-2xl font-bold mb-4">Keranjang anda !</h2>
             <div id="cartItems">Keranjang anda masih kosong ...</div>
@@ -270,8 +227,6 @@ $conn->close();
             <button class="btn-primary mt-4" id="checkoutBtn">Bayar</button>
         </div>
     </div>
-
-    <!-- Checkout Modal -->
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
             <div class="modal-header flex">
@@ -306,22 +261,7 @@ $conn->close();
                         <label for="address" class="block">Alamat Lengkap:</label>
                         <textarea id="address" name="address" class="w-full border rounded p-2" required></textarea>
                     </div>
-                    <div class="mb-4">
-                        <label for="paymentMethod" class="block">Metode Pembayaran:</label>
-                        <select id="paymentMethod" name="paymentMethod" class="w-full border rounded p-2" required>
-                            <option value="Bank BCA (7235535874)">Bank BCA (7235535874)</option>
-                            <option value="Bank Mandiri (1550012084433)">Bank Mandiri (1550012084433)</option>
-                            <option value="Bank DKI (62723140933)">Bank DKI (62723140933)</option>
-                            <option value="Gopay (085710847277)">Gopay (085710847277)</option>
-                            <option value="Shopee Pay (081514587316)">Shopee Pay (081514587316)</option>
-                            <option value="Ovo (081514587316)">Ovo (081514587316)</option>
-                            <option value="Dana (085710847277)">Dana (081514587316)</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="proofOfPayment" class="block">Unggah Bukti Pembayaran:</label>
-                        <input type="file" id="proofOfPayment" name="proofOfPayment" class="w-full border rounded p-2" required>
-                    </div>
+
                     <div class="mb-4">
                         <label for="orderDetails" class="block">Detail Pesanan:</label>
                         <div id="orderDetails" class="w-full border rounded p-2"></div>
@@ -335,125 +275,124 @@ $conn->close();
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cart = {}; // Initialize an empty cart
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let cart = {}; // Initialize an empty cart
 
-            // Add to Cart button click event
-            document.querySelectorAll(".add-to-cart").forEach(function(button) {
-                button.addEventListener("click", function() {
-                    let productName = button.getAttribute("data-product");
-                    let productPrice = parseFloat(button.getAttribute("data-price"));
-                    let productStock = parseInt(button.getAttribute("data-stock"));
-                    let quantityInput = document.getElementById("quantity" + productName.replace(/ /g, ""));
-                    let quantity = parseInt(quantityInput.value);
+    // Add to Cart button click event
+    document.querySelectorAll(".add-to-cart").forEach(function(button) {
+        button.addEventListener("click", function() {
+            let productName = button.getAttribute("data-product");
+            let productPrice = parseFloat(button.getAttribute("data-price"));
+            let productStock = parseInt(button.getAttribute("data-stock"));
+            let quantityInput = document.getElementById("quantity" + productName.replace(/ /g, ""));
+            let quantity = parseInt(quantityInput.value);
 
-                    if (quantity > 0 && quantity <= productStock) {
-                        if (cart[productName]) {
-                            cart[productName].quantity += quantity;
-                        } else {
-                            cart[productName] = {
-                                price: productPrice,
-                                quantity: quantity,
-                                stock: productStock
-                            };
-                        }
+            if (quantity > 0 && quantity <= productStock) {
+                if (cart[productName]) {
+                    cart[productName].quantity += quantity;
+                } else {
+                    cart[productName] = {
+                        price: productPrice,
+                        quantity: quantity,
+                        stock: productStock
+                    };
+                }
 
-                        updateCartDisplay();
-                        quantityInput.value = ""; // Reset the quantity input
-                    } else {
-                        alert("Invalid quantity. Please enter a quantity between 1 and " + productStock);
-                    }
-                });
-            });
+                updateCartDisplay();
+                quantityInput.value = ""; // Reset the quantity input
+            } else {
+                alert("Invalid quantity. Please enter a quantity between 1 and " + productStock);
+            }
+        });
+    });
 
-            function displayOrderDetails() {
-    const orderDetailsDiv = document.getElementById('orderDetails');
-    let orderDetails = []; // Menyimpan detail pesanan dalam bentuk array
+    function displayOrderDetails() {
+        const orderDetailsDiv = document.getElementById('orderDetails');
+        let orderDetails = []; // Menyimpan detail pesanan dalam bentuk array
 
-    for (const product in cart) {
-        if (cart.hasOwnProperty(product)) {
-            orderDetails.push(`${product}: ${cart[product].quantity}`); // Tambahkan setiap item sebagai string
+        for (const product in cart) {
+            if (cart.hasOwnProperty(product)) {
+                orderDetails.push(`${product}: ${cart[product].quantity}`); // Tambahkan setiap item sebagai string
+            }
         }
+
+        // Tampilkan sebagai daftar HTML
+        const orderDetailsHTML = '<ul>' + orderDetails.map(item => `<li>${item}</li>`).join('') + '</ul>';
+        orderDetailsDiv.innerHTML = orderDetailsHTML;
+
+        // Simpan sebagai JSON untuk PHP
+        const orderDetailsJSON = JSON.stringify(orderDetails);
+        // Menggunakan hidden input untuk menyimpan orderDetailsJSON
+        document.getElementById('orderDetailsInput').value = orderDetailsJSON;
     }
 
-    // Tampilkan sebagai daftar HTML
-    const orderDetailsHTML = '<ul>' + orderDetails.map(item => `<li>${item}</li>`).join('') + '</ul>';
-    orderDetailsDiv.innerHTML = orderDetailsHTML;
+    document.getElementById("checkoutBtn").addEventListener("click", function() {
+        displayOrderDetails(); // Update the order details before displaying the modal
+        let totalPayment = parseFloat(document.getElementById("totalPayment").innerText);
+        document.getElementById("totalPaymentInput").value = totalPayment;
+        document.getElementById("cartItemsInput").value = JSON.stringify(cart);
 
-    // Simpan sebagai JSON untuk PHP
-    const orderDetailsJSON = JSON.stringify(orderDetails);
-    // Menggunakan hidden input untuk menyimpan orderDetailsJSON
-    document.getElementById('orderDetailsInput').value = orderDetailsJSON;
-}
+        // Show the checkout modal
+        document.getElementById("checkoutModal").style.display = "block";
+    });
 
+    // Update Cart Display
+    function updateCartDisplay() {
+        let cartItemsDiv = document.getElementById("cartItems");
+        cartItemsDiv.innerHTML = "";
 
-            document.getElementById("checkoutBtn").addEventListener("click", function() {
-                displayOrderDetails(); // Update the order details before displaying the modal
-                let totalPayment = parseFloat(document.getElementById("totalPayment").innerText);
-                document.getElementById("totalPaymentInput").value = totalPayment;
-                document.getElementById("cartItemsInput").value = JSON.stringify(cart);
+        let totalPrice = 0;
+        for (let product in cart) {
+            if (cart.hasOwnProperty(product)) {
+                let item = cart[product];
+                let itemPrice = item.price * item.quantity;
+                totalPrice += itemPrice;
 
-                // Show the checkout modal
-                document.getElementById("checkoutModal").style.display = "block";
-            });
+                let itemDiv = document.createElement("div");
+                itemDiv.className = "cart-item";
+                itemDiv.innerHTML = `
+                    <span>${product}</span>
+                    <span>Price: $${item.price.toFixed(2)}</span>
+                    <span>Quantity: ${item.quantity}</span>
+                    <span>Total: $${itemPrice.toFixed(2)}</span>
+                `;
 
-            // Update Cart display
-            function updateCartDisplay() {
-                let cartItemsDiv = document.getElementById("cartItems");
-                cartItemsDiv.innerHTML = "";
-
-                let totalPayment = 0;
-                for (let product in cart) {
-                    let item = cart[product];
-                    totalPayment += item.price * item.quantity;
-
-                    cartItemsDiv.innerHTML += `
-                <div class="cart-item mb-2">
-                    <p class="font-semibold">${product}</p>
-                    <p>Harga: Rp${item.price} x Banyak: ${item.quantity} = Rp${item.price * item.quantity}</p>
-                    <button class="btn-secondary remove-from-cart" data-product="${product}">Hapus</button>
-                </div>
-            `;
-                }
-
-                document.getElementById("totalPayment").innerText = totalPayment.toFixed(2);
-
-                // Add click event to Remove buttons
-                document.querySelectorAll(".remove-from-cart").forEach(function(button) {
-                    button.addEventListener("click", function() {
-                        let productName = button.getAttribute("data-product");
-                        delete cart[productName];
-                        updateCartDisplay();
-                    });
-                });
+                cartItemsDiv.appendChild(itemDiv);
             }
+        }
 
-            // Checkout button click event
-            document.getElementById("checkoutBtn").addEventListener("click", function() {
-    displayOrderDetails(); // Update the order details before displaying the modal
-    let totalPayment = parseFloat(document.getElementById("totalPayment").innerText);
-    document.getElementById("totalPaymentInput").value = totalPayment;
-    document.getElementById("cartItemsInput").value = JSON.stringify(cart);
+        let totalPaymentDiv = document.getElementById("totalPayment");
+        totalPaymentDiv.innerText = totalPrice.toFixed(2);
+    }
 
-    // Show the checkout modal
-    document.getElementById("checkoutModal").style.display = "block";
+    // Close Modal
+    document.querySelector(".close").addEventListener("click", function() {
+        document.getElementById("checkoutModal").style.display = "none";
+    });
+
+    // Submit Order
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        let formData = new FormData(this);
+
+        fetch("path/to/your/php/script.php", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data); // Display response from the server (for debugging)
+            // Handle success or failure here (e.g., show a toast notification)
+        })
+        .catch(error => console.error("Error:", error));
+    });
 });
+</script>
 
 
-            // Close the modal
-            document.querySelector(".close").addEventListener("click", function() {
-                document.getElementById("checkoutModal").style.display = "none";
-            });
 
-            // Close the modal when clicking outside the modal content
-            window.addEventListener("click", function(event) {
-                if (event.target == document.getElementById("checkoutModal")) {
-                    document.getElementById("checkoutModal").style.display = "none";
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

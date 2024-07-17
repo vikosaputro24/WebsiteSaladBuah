@@ -138,17 +138,14 @@ function updateIndexPengumuman($content)
             </div>
         </main>
     </div>
-
     <script>
         const hamburger = document.getElementById('hamburger');
         const sidebar = document.querySelector('.sidebar');
         const mobileMenu = document.getElementById('mobile-menu');
-
         hamburger.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
             mobileMenu.classList.toggle('hidden');
         });
-
         document.getElementById('dropdownBtn').addEventListener('click', function() {
             var dropdownMenu = document.getElementById('dropdownMenu');
             var otherNavItems = document.getElementById('otherNavItems');
@@ -164,7 +161,6 @@ function updateIndexPengumuman($content)
                 dropdownIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
             }
         });
-
         function updatePengumuman() {
             var form = document.getElementById("pengumumanForm");
             var formData = new FormData(form);

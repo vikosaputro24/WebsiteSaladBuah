@@ -139,18 +139,12 @@ $adminname = $_SESSION['adminname'];
                     </thead>
                     <tbody class="text-black text-sm font-light">
                         <?php
-                        // Koneksi ke database
-                        $conn = new mysqli('localhost', 'root', '', 'db_sabu'); // Sesuaikan dengan koneksi Anda
-
-                        // Memeriksa koneksi
+                        $conn = new mysqli('localhost', 'root', '', 'db_sabu'); 
                         if ($conn->connect_error) {
                             die("Koneksi gagal: " . $conn->connect_error);
                         }
-
-                        // Mengambil data dari tabel admin
                         $sql = "SELECT * FROM tb_loginadmin";
                         $result = $conn->query($sql);
-
                         if ($result->num_rows > 0) {
                             while ($admin = $result->fetch_assoc()) {
                                 echo "<tr class='border-b border-gray-200 hover:bg-gray-100'>";

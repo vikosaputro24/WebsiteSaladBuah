@@ -122,38 +122,32 @@ $adminname = $_SESSION['adminname'];
         <!-- Main Content -->
         <main class="p-4">
             <h2 class="text-5xl font-semibold text-gray-800 text-center">
-                <i class="fas fa-user"></i> Data Daftar User
+                <i class="fas fa-user"></i> Data Daftar Pengguna
             </h2>
 
             <div class="mt-4">
                 <button id="openModal" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-200">
-                <i class="fa-solid fa-plus pr-2"></i>Tambah User
+                <i class="fa-solid fa-plus pr-2"></i>Tambah Pengguna
                 </button>
                 <table class="min-w-full bg-white mt-4">
                     <thead class="text-white uppercase text-sm leading-normal" style="background-color: #fda085;">
                         <tr>
                             <th class="py-3 px-6 text-center">ID</th>
-                            <th class="py-3 px-6 text-center">Full Name</th>
-                            <th class="py-3 px-6 text-center">Username</th>
+                            <th class="py-3 px-6 text-center">Nama Lengkap</th>
+                            <th class="py-3 px-6 text-center">Nama Pengguna</th>
                             <th class="py-3 px-6 text-center">Telepon</th>
                             <th class="py-3 px-6 text-center">Email</th>
-                            <th class="py-3 px-6 text-center">Actions</th>
+                            <th class="py-3 px-6 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="text-black text-sm font-light">
                         <?php
-                        // Koneksi ke database
-                        $conn = new mysqli('localhost', 'root', '', 'db_sabu'); // Sesuaikan dengan koneksi Anda
-
-                        // Memeriksa koneksi
+                        $conn = new mysqli('localhost', 'root', '', 'db_sabu'); 
                         if ($conn->connect_error) {
                             die("Koneksi gagal: " . $conn->connect_error);
                         }
-
-                        // Mengambil data dari tabel users
                         $sql = "SELECT * FROM tb_loginuser";
                         $result = $conn->query($sql);
-
                         if ($result->num_rows > 0) {
                             while ($user = $result->fetch_assoc()) {
                                 echo "<tr class='border-b border-gray-200 hover:bg-gray-100'>";

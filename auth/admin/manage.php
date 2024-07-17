@@ -13,6 +13,7 @@
     </style>
 </head>
 <body class="min-h-screen" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
+
     <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-4">
             <a href="../admin/home.php" class="mr-4">
@@ -58,77 +59,51 @@
                 </thead>
                 <tbody>
                     <?php
-                    // Database connection parameters
                     $servername = "localhost";
-                    $username = "root"; // Replace with your MySQL username
-                    $password = ""; // Replace with your MySQL password
-                    $dbname = "db_sabu"; // Replace with your database name
-
-                    // Create connection
+                    $username = "root"; 
+                    $password = ""; 
+                    $dbname = "db_sabu"; 
                     $conn = new mysqli($servername, $username, $password, $dbname);
-
-                    // Check connection
                     if ($conn->connect_error) {
                         die("Connection failed: " . $conn->connect_error);
                     }
-
-                    // Insert new product if form submitted
                     if (isset($_POST['addProduct'])) {
                         $productName = $_POST['productName'];
                         $stock = $_POST['stock'];
                         $price = $_POST['price'];
-
-                        // Insert into database
                         $sql = "INSERT INTO products (product_name, stock, price) VALUES ('$productName', '$stock', '$price')";
-
                         if ($conn->query($sql) === TRUE) {
                             echo "Product added successfully.";
-                            // Redirect back to manage.php after 1 second
                             header("refresh:1; url=manage.php");
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                         }
                     }
-
-                    // Delete product if delete button clicked
                     if (isset($_GET['delete'])) {
                         $id = $_GET['delete'];
-
-                        // Delete from database
                         $sql_delete = "DELETE FROM products WHERE id=$id";
-
                         if ($conn->query($sql_delete) === TRUE) {
                             echo "Product deleted successfully.";
-                            // Redirect back to manage.php after 1 second
                             header("refresh:1; url=manage.php");
                         } else {
                             echo "Error deleting record: " . $conn->error;
                         }
                     }
-
-                    // Handle edit form submission
                     if (isset($_POST['updateProduct'])) {
                         $edit_id = $_POST['edit_id'];
                         $edit_productName = $_POST['edit_productName'];
                         $edit_stock = $_POST['edit_stock'];
                         $edit_price = $_POST['edit_price'];
-
-                        // Update product in database
                         $sql_update = "UPDATE products SET product_name='$edit_productName', stock='$edit_stock', price='$edit_price' WHERE id=$edit_id";
-
                         if ($conn->query($sql_update) === TRUE) {
                             echo "Product updated successfully.";
-                            // Redirect back to manage.php after 1 second
                             header("refresh:1; url=manage.php");
                         } else {
                             echo "Error updating record: " . $conn->error;
                         }
                     }
-
-                    // Retrieve existing products from database
                     $sql_select = "SELECT * FROM products";
                     $result = $conn->query($sql_select);
-
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
@@ -141,8 +116,6 @@
                             echo "<a href='manage.php?delete=" . $row["id"] . "' class='ml-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded'>Hapus</a>";
                             echo "</td>";
                             echo "</tr>";
-
-                            // Modal for edit product
                             echo "<div class='modal fade' id='editModal_" . $row["id"] . "' tabindex='-1' role='dialog' aria-labelledby='editModalLabel_" . $row["id"] . "' aria-hidden='true'>";
                             echo "<div class='modal-dialog' role='document'>";
                             echo "<div class='modal-content'>";

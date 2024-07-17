@@ -130,8 +130,6 @@
             </button>
         </div>
     </div>
-
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Card 1: Apel -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;">
@@ -141,7 +139,6 @@
                 <p class="text-gray-700 mb-4">Buah ini kaya akan serat yang membantu menjaga kesehatan pencernaan dan dapat menurunkan kadar kolesterol. </p>
             </div>
         </div>
-
         <!-- Card 2: Pisang -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;">
             <img src="../../assets/pisang.png" alt="Pisang" class="w-full h-40 object-cover" style="width: fit-content; padding-left:60px;">
@@ -150,7 +147,6 @@
                 <p class="text-gray-700 mb-4">Buah rendah lemak dan kaya akan kalium, membantu menjaga kesehatan jantung dan mengatur tekanan darah.</p>
             </div>
         </div>
-
         <!-- Card 3: Anggur -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;">
             <img src="../../assets/anggur.png" alt="Pisang" class="w-full h-40 object-cover" style="width: fit-content; padding-left:60px; padding-right:25px;">
@@ -167,7 +163,6 @@
                 <p class="text-gray-700 mb-4">Buah ini dapat melawan radikal bebas, sehingga dapat mencegah kerusakan sel dan mengurangi risiko penyakit kronis.</p>
             </div>
         </div>
-
         <!-- Card 5: Mangga -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
             <img src="../../assets/mangga.png" alt="Mangga" class="w-full h-40 object-cover" style="width: fit-content; padding-left:60px;">
@@ -176,7 +171,6 @@
                 <p class="text-gray-700 mb-4">Buah ini mengandung vitamin C berguna untuk menjaga kekebalan tubuh dan melawan infeksi.</p>
             </div>
         </div>
-
         <!-- Card 6: Strawberry -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
             <img src="../../assets/strawberry.png" alt="Strawberry" class="w-full h-40 object-cover" style="width: fit-content; padding-left:90px;">
@@ -185,7 +179,6 @@
                 <p class="text-gray-700 mb-4">Buah rendah lemak dan kaya akan kalium, membantu menjaga kesehatan jantung dan mengatur tekanan darah.</p>
             </div>
         </div>
-
         <!-- Card 7: Alpukat -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
             <img src="../../assets/alpukat.png" alt="alpukat" class="w-full h-40 object-cover" style="width: fit-content; padding-left:90px;">
@@ -194,7 +187,6 @@
                 <p class="text-gray-700 mb-4">Alpukat mengandung antioksidan seperti beta-karoten, dan selenium yang membantu melawan kerusakan sel di dalam tubuh.</p>
             </div>
         </div>
-
         <!-- Card 8: Kiwi -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
             <img src="../../assets/kiwi.jpg" alt="kiwi" class="w-full h-40 object-cover" style="width: fit-content; padding-left:90px;">
@@ -203,7 +195,6 @@
                 <p class="text-gray-700 mb-4">Kiwi mengandung serat pangan yang membantu memperlancar pencernaan, dan menjaga kesehatan usus secara keseluruhan.</p>
             </div>
         </div>
-
         <!-- Card 9: Jeruk -->
         <div class="bg-white rounded-lg overflow-hidden shadow-md card hover-pop" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 20px rgba(0, 0, 0, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
             <img src="../../assets/jeruk.png" alt="Jeruk" class="w-full h-40 object-cover" style="width: fit-content; padding-left:90px;">

@@ -5,3 +5,4 @@ CREATE TABLE products (
     price DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id)
 );
+require_once dirname(__FILE__) . '/../../Midtrans.php';

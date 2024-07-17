@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search'])) {
     $search_query = $_POST['search_query'];
 }
 
-$sql = "SELECT order_id, fullname, telepon, email, wilayah, address, total_payment, payment_method, proof_of_payment, orderDetails, order_date, status FROM tb_orders";
+$sql = "SELECT order_id, fullname, telepon, email, wilayah, address, orderDetails, order_date, status FROM tb_orders";
 if (!empty($search_query)) {
     $sql .= " WHERE order_id LIKE '%$search_query%' OR fullname LIKE '%$search_query%' OR order_date LIKE '%$search_query%' OR telepon LIKE '%$search_query%' OR email LIKE '%$search_query%'";
 }
@@ -106,11 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telepon</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pembayaran</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metode Pembayaran</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pesanan</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bukti Pembayaran</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
                     </tr>
                     </thead>
@@ -121,8 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['fullname']); ?></td>
                                 <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['telepon']); ?></td>
                                 <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['email']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['total_payment']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['payment_method']); ?></td>
+
                                 <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($row['order_date']); ?></td>
                                 <td class="px-4 py-2">
                                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -136,13 +132,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </select>
                                         <button type="submit" name="update_status" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded ml-2">Update</button>
                                     </form>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <?php if ($row['proof_of_payment']) : ?>
-                                        <a href="<?php echo htmlspecialchars($row['proof_of_payment']); ?>" target="uploads/" class="text-orange-500 hover:underline">Lihat Bukti</a>
-                                    <?php else : ?>
-                                        <span class="text-gray-500">Tidak ada bukti pembayaran</span>
-                                    <?php endif; ?>
                                 </td>
                                 <td class="px-4 py-2">
                                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

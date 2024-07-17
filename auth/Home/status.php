@@ -5,12 +5,8 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: ../user/login.php');
     exit();
 }
-
 include '../../koneksi.php';
-
 $user_id = $_SESSION['user_id'];
-
-// Fetch user details
 $sql = "SELECT fullname, telepon, email FROM tb_loginuser WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $user_id);
@@ -18,9 +14,7 @@ $stmt->execute();
 $stmt->bind_result($fullname, $telepon, $email);
 $stmt->fetch();
 $stmt->close();
-
-// Fetch payment status
-$sql_payment = "SELECT order_id, fullname, telepon, email, wilayah, address, total_payment, payment_method, proof_of_payment, order_date, orderDetails, status FROM tb_orders WHERE email = ?";
+$sql_payment = "SELECT order_id, fullname, telepon, email, wilayah, address, order_date, orderDetails, status FROM tb_orders WHERE email = ?";
 $stmt_payment = $conn->prepare($sql_payment);
 $stmt_payment->bind_param("s", $email);
 $stmt_payment->execute();
@@ -31,7 +25,6 @@ $stmt_payment->close();
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,13 +79,10 @@ $stmt_payment->close();
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Pesanan</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telepon</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pembayaran</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metode Pembayaran</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detail Pesanan</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pesanan</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bukti Pembayaran</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
                     </tr>
                 </thead>
@@ -103,21 +93,12 @@ $stmt_payment->close();
                             <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['fullname']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['telepon']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['email']); ?></td>
-                            <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['total_payment']); ?></td>
-                            <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['payment_method']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['orderDetails']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($payment['order_date']); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo $payment['status'] == 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
                                     <?php echo htmlspecialchars($payment['status']); ?>
                                 </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <?php if ($payment['proof_of_payment']) : ?>
-                                    <a href="<?php echo htmlspecialchars($payment['proof_of_payment']); ?>" target="_blank" class="text-indigo-600 hover:text-indigo-900">Lihat Bukti</a>
-                                <?php else : ?>
-                                    <span class="text-gray-500">Tidak ada bukti pembayaran</span>
-                                <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <!-- Button to trigger modal -->
@@ -142,10 +123,7 @@ $stmt_payment->close();
                                         <p>EMAIL: <?php echo htmlspecialchars($payment['email']); ?></p>
                                         <p>WILAYAH: <?php echo htmlspecialchars($payment['wilayah']); ?></p>
                                         <p>ALAMAT: <?php echo htmlspecialchars($payment['address']); ?></p>
-                                        <p>TOTAL PEMBAYARAN: <?php echo htmlspecialchars($payment['total_payment']); ?></p>
-                                        <p>METODE PEMBAYARAN: <?php echo htmlspecialchars($payment['payment_method']); ?></p>
-                                        <p>BUKTI PEMBAYARAN: <?php echo htmlspecialchars($payment['proof_of_payment']); ?></p>
-                                        <p>TANGGAL PEMBAYARAN: <?php echo htmlspecialchars($payment['order_date']); ?></p>
+                                        <p>TANGGAL PEMESANAN: <?php echo htmlspecialchars($payment['order_date']); ?></p>
                                         <p>DETAIL PESANAN: <?php echo htmlspecialchars($payment['orderDetails']); ?></p>
                                         <!-- Isi konten faktur untuk ID pesanan <?php echo htmlspecialchars($payment['order_id']); ?> -->
                                     </div>
@@ -156,7 +134,6 @@ $stmt_payment->close();
                                 </div>
                             </div>
                         </div>
-
                     <?php endforeach; ?>
                 </tbody>
             </table>
